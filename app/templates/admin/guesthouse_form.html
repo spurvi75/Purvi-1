@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'Add' }} Guest House{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-house"></i> {{ 'Edit' if mode == 'edit' else 'Add' }} Guest House</h3></div>
+
+<div class="card">
+  <div class="card-body">
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="row g-3">
+        <div class="col-md-6">
+          {{ form.city.label(class="form-label") }}
+          {{ form.city(class="form-control") }}
+          {% for e in form.city.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control") }}
+          {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-8">
+          {{ form.address.label(class="form-label") }}
+          {{ form.address(class="form-control", rows="2") }}
+          {% for e in form.address.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.pincode.label(class="form-label") }}
+          {{ form.pincode(class="form-control") }}
+          {% for e in form.pincode.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.number_of_rooms.label(class="form-label") }}
+          {{ form.number_of_rooms(class="form-control") }}
+          {% if mode == 'edit' %}<div class="form-text text-warning">Changing this does not auto-add/remove rooms; manage rooms individually.</div>{% endif %}
+          {% for e in form.number_of_rooms.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.capacity_per_room.label(class="form-label") }}
+          {{ form.capacity_per_room(class="form-control") }}
+          {% for e in form.capacity_per_room.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.gender_accommodated.label(class="form-label") }}<br>
+          {% for subfield in form.gender_accommodated %}
+            <div class="form-check form-check-inline">
+              {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+            </div>
+          {% endfor %}
+          {% for e in form.gender_accommodated.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-12">
+          <div class="form-check">
+            {{ form.is_active(class="form-check-input") }}
+            {{ form.is_active.label(class="form-check-label") }}
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('admin.guesthouse_list') }}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

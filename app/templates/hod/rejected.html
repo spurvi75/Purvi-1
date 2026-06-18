@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Rejected Requests{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-circle-xmark"></i> Rejected Requests</h3></div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead><tr><th>Booking No.</th><th>Employee</th><th>Guest House</th><th>Check-in</th><th>Check-out</th><th>Rejection Reason</th></tr></thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.employee_name }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td>{{ b.hod_rejection_reason }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No rejected requests.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

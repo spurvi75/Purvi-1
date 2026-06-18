@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}My Booking Status{% endblock %}
+{% block content %}
+<div class="brand-header d-flex justify-content-between align-items-center">
+  <h3><i class="fa-solid fa-list-check"></i> My Booking Status / History</h3>
+  <a href="{{ url_for('employee.booking') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Booking</a>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Booking No.</th><th>City</th><th>Guest House</th><th>Room</th>
+          <th>Check-in</th><th>Check-out</th><th>Status</th><th>HOD Approval</th>
+          <th>Rejection Reason</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.city }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary badge-status">{{ b.booking_status }}</span></td>
+          <td>{{ b.hod_approval_status }}</td>
+          <td>{{ b.hod_rejection_reason or '-' }}</td>
+          <td class="text-nowrap">
+            {% if b.booking_status == 'Confirmed' %}
+              <a href="{{ url_for('employee.booking_confirmation', booking_id=b.id) }}" class="btn btn-sm btn-outline-primary" title="Print"><i class="fa-solid fa-print"></i></a>
+            {% endif %}
+            {% if b.booking_status in ['Pending HOD Approval', 'Approved', 'Confirmed'] %}
+              <a href="{{ url_for('employee.cancel_booking', booking_id=b.id) }}" class="btn btn-sm btn-outline-danger" title="Cancel"><i class="fa-solid fa-ban"></i></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="10" class="text-center text-muted">You have no bookings yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

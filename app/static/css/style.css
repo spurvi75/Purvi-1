@@ -1,0 +1,77 @@
+:root {
+  --axis-navy: #0d2c54;
+  --axis-blue: #1565c0;
+  --axis-gold: #d4a017;
+  --axis-light: #f4f7fb;
+}
+
+body {
+  background-color: var(--axis-light);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.axis-navbar {
+  background: linear-gradient(90deg, var(--axis-navy), var(--axis-blue));
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(13, 44, 84, 0.08);
+}
+
+.card-header {
+  background-color: var(--axis-navy);
+  color: #fff;
+  border-radius: 10px 10px 0 0 !important;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--axis-blue);
+  border-color: var(--axis-blue);
+}
+
+.btn-primary:hover {
+  background-color: var(--axis-navy);
+  border-color: var(--axis-navy);
+}
+
+.dashboard-card {
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+
+.dashboard-card .stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dc-1 { background: linear-gradient(135deg, #1565c0, #0d2c54); }
+.dc-2 { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+.dc-3 { background: linear-gradient(135deg, #ef6c00, #b53d00); }
+.dc-4 { background: linear-gradient(135deg, #6a1b9a, #4a148c); }
+.dc-5 { background: linear-gradient(135deg, #c62828, #8e0000); }
+.dc-6 { background: linear-gradient(135deg, #00838f, #005662); }
+
+.table thead {
+  background-color: var(--axis-navy);
+  color: #fff;
+}
+
+.badge-status {
+  font-size: 0.78rem;
+  padding: 0.35em 0.7em;
+}
+
+.brand-header {
+  border-bottom: 3px solid var(--axis-gold);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media print {
+  .navbar, footer, .no-print { display: none !important; }
+}

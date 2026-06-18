@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Guest House Booking{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-bed"></i> Guest House Booking</h3></div>
+
+<div class="row">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header">Booking Request</div>
+      <div class="card-body">
+        <form method="POST" novalidate id="bookingForm">
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-md-6">
+              {{ form.city.label(class="form-label") }}
+              {{ form.city(class="form-select", onchange="this.form.submit()") }}
+              {% for e in form.city.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-6">
+              {{ form.guest_house_id.label(class="form-label") }}
+              {{ form.guest_house_id(class="form-select") }}
+              {% for e in form.guest_house_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-6">
+              {{ form.check_in_date.label(class="form-label") }}
+              {{ form.check_in_date(class="form-control", type="date", min=today.isoformat()) }}
+              {% for e in form.check_in_date.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-6">
+              {{ form.check_out_date.label(class="form-label") }}
+              {{ form.check_out_date(class="form-control", type="date", min=today.isoformat()) }}
+              {% for e in form.check_out_date.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-12">
+              {{ form.purpose_of_visit.label(class="form-label") }}
+              {{ form.purpose_of_visit(class="form-control", rows="2") }}
+              {% for e in form.purpose_of_visit.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="col-md-12">
+              {{ form.remarks.label(class="form-label") }}
+              {{ form.remarks(class="form-control", rows="2") }}
+              {% for e in form.remarks.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+          </div>
+          <div class="mt-4 d-flex gap-2">
+            {{ form.submit_check(class="btn btn-outline-primary") }}
+            {{ form.submit_booking(class="btn btn-primary", disabled=not (result and result.available)) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    {% if guest_house %}
+    <div class="card mb-3">
+      <div class="card-header">Guest House Details</div>
+      <div class="card-body">
+        <p><b>Name:</b> {{ guest_house.name }}</p>
+        <p><b>City:</b> {{ guest_house.city }}</p>
+        <p><b>Address:</b> {{ guest_house.address }}</p>
+        <p><b>Pincode:</b> {{ guest_house.pincode }}</p>
+        <p><b>Gender Accommodated:</b> {{ guest_house.gender_accommodated }}</p>
+        <p><b>Rooms:</b> {{ guest_house.number_of_rooms }} &nbsp; <b>Capacity/Room:</b> {{ guest_house.capacity_per_room }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if result %}
+      {% if result.available %}
+        <div class="alert alert-success">
+          <i class="fa-solid fa-circle-check"></i> Room available! Allocated Room Number:
+          <b>{{ result.room.room_number }}</b>.<br>
+          You may now click "Submit Booking Request".
+        </div>
+      {% else %}
+        <div class="alert alert-danger">
+          <i class="fa-solid fa-circle-xmark"></i> {{ result.message }}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Progressive enhancement: when the guest house dropdown changes, nothing
+// extra is required because the city dropdown auto-submits the form via
+// onchange, repopulating the guest house list server-side on reload.
+</script>
+{% endblock %}

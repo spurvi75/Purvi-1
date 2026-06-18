@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}HOD Dashboard{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-gauge"></i> HOD Dashboard</h3></div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="dashboard-card dc-5">
+      <div class="stat-number">{{ pending_count }}</div>
+      <div>Pending Approvals</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="dashboard-card dc-2">
+      <div class="stat-number">{{ approved_count }}</div>
+      <div>Approved Requests</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="dashboard-card dc-4">
+      <div class="stat-number">{{ rejected_count }}</div>
+      <div>Rejected Requests</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.pending_approvals') }}">Pending Approvals</a></div>
+  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.approved_requests') }}">Approved Requests</a></div>
+  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.rejected_requests') }}">Rejected Requests</a></div>
+</div>
+
+<div class="card">
+  <div class="card-header">Recent Pending Requests</div>
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead><tr><th>Booking No.</th><th>Employee</th><th>Guest House</th><th>Room</th><th>Check-in</th><th>Check-out</th><th></th></tr></thead>
+      <tbody>
+        {% for b in recent_pending %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.employee_name }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><a href="{{ url_for('hod.booking_detail', booking_id=b.id) }}" class="btn btn-sm btn-outline-primary">Review</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted">No pending requests.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

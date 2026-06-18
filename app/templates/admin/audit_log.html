@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Audit Log{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-clipboard-list"></i> Audit Log</h3></div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr><th>Timestamp</th><th>Performed By</th><th>Action</th><th>Entity</th><th>Entity ID</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.timestamp.strftime('%d-%b-%Y %H:%M') }}</td>
+          <td>{{ log.performed_by }}</td>
+          <td><span class="badge bg-info text-dark">{{ log.action }}</span></td>
+          <td>{{ log.entity_type }}</td>
+          <td>{{ log.entity_id }}</td>
+          <td>{{ log.details }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted">No audit entries yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

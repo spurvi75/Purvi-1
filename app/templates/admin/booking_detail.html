@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Booking {{ booking.booking_number }}{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-receipt"></i> Booking Detail - {{ booking.booking_number }}</h3></div>
+
+<div class="card mb-4">
+  <div class="card-header">Booking Information</div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><b>Employee:</b> {{ booking.employee_name }} ({{ booking.employee_email }})</p>
+        <p><b>Mobile:</b> {{ booking.mobile_number }}</p>
+        <p><b>Grade:</b> {{ booking.grade }} &nbsp; <b>Gender:</b> {{ booking.gender }}</p>
+        <p><b>HOD Email:</b> {{ booking.hod_email or '-' }}</p>
+        <p><b>City:</b> {{ booking.city }}</p>
+        <p><b>Guest House:</b> {{ booking.guest_house_name }}</p>
+        <p><b>Address:</b> {{ booking.guest_house.address }}, {{ booking.guest_house.pincode }}</p>
+        <p><b>Room Number:</b> {{ booking.room_number }}</p>
+      </div>
+      <div class="col-md-6">
+        <p><b>Check-in:</b> {{ booking.check_in_date }}</p>
+        <p><b>Check-out:</b> {{ booking.check_out_date }}</p>
+        <p><b>Purpose:</b> {{ booking.purpose_of_visit }}</p>
+        <p><b>Remarks:</b> {{ booking.remarks or '-' }}</p>
+        <p><b>Status:</b> <span class="badge bg-secondary badge-status">{{ booking.booking_status }}</span></p>
+        <p><b>HOD Approval Status:</b> {{ booking.hod_approval_status }}</p>
+        {% if booking.hod_rejection_reason %}<p><b>Rejection Reason:</b> {{ booking.hod_rejection_reason }}</p>{% endif %}
+        {% if booking.cancellation_reason %}
+          <p><b>Cancelled By:</b> {{ booking.cancelled_by }}</p>
+          <p><b>Cancellation Reason:</b> {{ booking.cancellation_reason }}</p>
+        {% endif %}
+        <p><b>Created:</b> {{ booking.created_date.strftime('%d-%b-%Y %H:%M') }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if booking.booking_status in ['Pending HOD Approval', 'Approved', 'Confirmed'] %}
+<div class="card">
+  <div class="card-header">Manually Cancel Booking</div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('admin.booking_cancel', booking_id=booking.id) }}">
+      {{ cancel_form.hidden_tag() }}
+      <div class="mb-3">
+        {{ cancel_form.reason.label(class="form-label") }}
+        {{ cancel_form.reason(class="form-control", rows="3") }}
+      </div>
+      {{ cancel_form.submit(class="btn btn-danger") }}
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<a href="{{ url_for('admin.bookings_all') }}" class="btn btn-outline-secondary mt-3">Back to Bookings</a>
+{% endblock %}

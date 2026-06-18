@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-chart-column"></i> Reports</h3></div>
+
+<div class="card mb-4">
+  <div class="card-header">Filters</div>
+  <div class="card-body">
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="row g-3">
+        <div class="col-md-3">
+          {{ form.report_type.label(class="form-label") }}
+          {{ form.report_type(class="form-select") }}
+        </div>
+        <div class="col-md-2">
+          {{ form.from_date.label(class="form-label") }}
+          {{ form.from_date(class="form-control", type="date") }}
+        </div>
+        <div class="col-md-2">
+          {{ form.to_date.label(class="form-label") }}
+          {{ form.to_date(class="form-control", type="date") }}
+        </div>
+        <div class="col-md-2">
+          {{ form.city.label(class="form-label") }}
+          {{ form.city(class="form-control") }}
+        </div>
+        <div class="col-md-3">
+          {{ form.guest_house_id.label(class="form-label") }}
+          {{ form.guest_house_id(class="form-select") }}
+        </div>
+        <div class="col-md-3">
+          {{ form.employee_email.label(class="form-label") }}
+          {{ form.employee_email(class="form-control") }}
+        </div>
+        <div class="col-md-3">
+          {{ form.status.label(class="form-label") }}
+          {{ form.status(class="form-select") }}
+        </div>
+      </div>
+      <div class="mt-4 d-flex gap-2">
+        {{ form.submit(class="btn btn-primary") }}
+        {{ form.export(class="btn btn-success") }}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if generated %}
+<div class="card">
+  <div class="card-header">Report Results ({{ bookings|length }} record(s))</div>
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Booking No.</th><th>Employee</th><th>City</th><th>Guest House</th><th>Room</th>
+          <th>Check-in</th><th>Check-out</th><th>Status</th><th>HOD Approval</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.employee_name }}</td>
+          <td>{{ b.city }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary badge-status">{{ b.booking_status }}</span></td>
+          <td>{{ b.hod_approval_status }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="text-center text-muted">No records match the selected filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

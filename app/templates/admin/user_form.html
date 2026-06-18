@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if mode == 'edit' else 'Add' }} User{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-user-pen"></i> {{ 'Edit' if mode == 'edit' else 'Add' }} User</h3></div>
+
+<div class="card">
+  <div class="card-body">
+    <form method="POST" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="row g-3">
+        <div class="col-md-4">
+          {{ form.employee_code.label(class="form-label") }}
+          {{ form.employee_code(class="form-control") }}
+          {% for e in form.employee_code.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-8">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control") }}
+          {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6">
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control", placeholder="Leave blank to keep unchanged" if mode == 'edit' else "") }}
+          {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.mobile_number.label(class="form-label") }}
+          {{ form.mobile_number(class="form-control") }}
+          {% for e in form.mobile_number.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.grade.label(class="form-label") }}
+          {{ form.grade(class="form-select") }}
+          {% for e in form.grade.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          {{ form.gender.label(class="form-label") }}
+          {{ form.gender(class="form-select") }}
+          {% for e in form.gender.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6">
+          {{ form.hod_name.label(class="form-label") }}
+          {{ form.hod_name(class="form-control") }}
+          {% for e in form.hod_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-6">
+          {{ form.hod_email.label(class="form-label") }}
+          {{ form.hod_email(class="form-control") }}
+          {% for e in form.hod_email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-8">
+          {{ form.roles.label(class="form-label") }}<br>
+          {% for subfield in form.roles %}
+            <div class="form-check form-check-inline">
+              {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+            </div>
+          {% endfor %}
+          {% for e in form.roles.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4">
+          <div class="form-check mt-4">
+            {{ form.is_active_user(class="form-check-input") }}
+            {{ form.is_active_user.label(class="form-check-label") }}
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('admin.user_list') }}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

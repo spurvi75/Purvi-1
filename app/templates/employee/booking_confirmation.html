@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmation - {{ booking.booking_number }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 no-print">
+  <h3><i class="fa-solid fa-receipt"></i> Booking Confirmation</h3>
+  <div>
+    <button onclick="window.print()" class="btn btn-outline-primary"><i class="fa-solid fa-print"></i> Print</button>
+    <a href="{{ url_for('employee.booking_confirmation_pdf', booking_id=booking.id) }}" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Download PDF</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="text-center brand-header pb-3 mb-4">
+      <h2 class="text-primary">{{ company_name }}</h2>
+      <h5 class="text-muted">Guest House Booking Confirmation</h5>
+    </div>
+
+    <table class="table table-borderless">
+      <tr><th style="width: 240px;">Booking No.</th><td>{{ booking.booking_number }}</td></tr>
+      <tr><th>Employee Name</th><td>{{ booking.employee_name }}</td></tr>
+      <tr><th>Employee ID</th><td>{{ booking.employee_id }}</td></tr>
+      <tr><th>Mobile Number</th><td>{{ booking.mobile_number }}</td></tr>
+      <tr><th>City</th><td>{{ booking.city }}</td></tr>
+      <tr><th>Guest House</th><td>{{ booking.guest_house_name }}</td></tr>
+      <tr><th>Address</th><td>{{ booking.guest_house.address }}, {{ booking.guest_house.pincode }}</td></tr>
+      <tr><th>Room Number</th><td>{{ booking.room_number }}</td></tr>
+      <tr><th>Check-in Date</th><td>{{ booking.check_in_date.strftime('%d-%b-%Y') }}</td></tr>
+      <tr><th>Check-out Date</th><td>{{ booking.check_out_date.strftime('%d-%b-%Y') }}</td></tr>
+      <tr><th>Purpose of Visit</th><td>{{ booking.purpose_of_visit }}</td></tr>
+      <tr><th>Approved By (HOD)</th><td>{{ booking.hod_email or '-' }}</td></tr>
+      <tr><th>Approval Date</th><td>{{ booking.hod_approval_date.strftime('%d-%b-%Y %H:%M') if booking.hod_approval_date else '-' }}</td></tr>
+      <tr><th>Status</th><td><span class="badge bg-success badge-status">{{ booking.booking_status }}</span></td></tr>
+    </table>
+
+    <h6 class="mt-4 text-primary">Important Instructions</h6>
+    <ul>
+      <li>Please carry a valid Company ID card during your stay.</li>
+      <li>Check-in / check-out timings are as per guest house policy.</li>
+      <li>Any damage to guest house property will be billed to the employee.</li>
+      <li>This confirmation must be presented at the guest house reception.</li>
+      <li>For any issues, contact the Admin department.</li>
+    </ul>
+  </div>
+</div>
+
+<a href="{{ url_for('employee.my_bookings') }}" class="btn btn-outline-secondary mt-3 no-print">Back to My Bookings</a>
+{% endblock %}

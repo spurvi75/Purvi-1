@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="brand-header d-flex justify-content-between align-items-center">
+  <h3><i class="fa-solid fa-gauge"></i> Admin Dashboard</h3>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-1">
+      <div class="stat-number">{{ cards.total_guest_houses }}</div>
+      <div>Active Guest Houses</div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-2">
+      <div class="stat-number">{{ cards.total_rooms }}</div>
+      <div>Active Rooms</div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-3">
+      <div class="stat-number">{{ cards.today_checkins }}</div>
+      <div>Today's Check-ins</div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-4">
+      <div class="stat-number">{{ cards.today_checkouts }}</div>
+      <div>Today's Check-outs</div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-5">
+      <div class="stat-number">{{ cards.pending_approvals }}</div>
+      <div>Pending HOD Approvals</div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6">
+    <div class="dashboard-card dc-6">
+      <div class="stat-number">{{ cards.confirmed_bookings }}</div>
+      <div>Confirmed Bookings</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.guesthouse_list') }}"><i class="fa-solid fa-house"></i> Guest House Master</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.user_list') }}"><i class="fa-solid fa-users"></i> User Master</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('admin.bookings_all') }}"><i class="fa-solid fa-calendar-check"></i> Booking Requests</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('reports.index') }}"><i class="fa-solid fa-chart-column"></i> Reports</a></div>
+</div>
+
+<div class="card">
+  <div class="card-header">Recent Bookings</div>
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr><th>Booking No.</th><th>Employee</th><th>Guest House</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for b in recent_bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.employee_name }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary badge-status">{{ b.booking_status }}</span></td>
+          <td><a href="{{ url_for('admin.booking_detail', booking_id=b.id) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted">No bookings yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

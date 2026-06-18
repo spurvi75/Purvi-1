@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Guest House Master{% endblock %}
+{% block content %}
+<div class="brand-header d-flex justify-content-between align-items-center">
+  <h3><i class="fa-solid fa-house"></i> Guest House Master</h3>
+  <a href="{{ url_for('admin.guesthouse_new') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Guest House</a>
+</div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-md-4">
+    <input type="text" name="q" class="form-control" placeholder="Search by name or city..." value="{{ search }}">
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-outline-secondary" type="submit"><i class="fa-solid fa-search"></i> Search</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr><th>City</th><th>Name</th><th>Pincode</th><th>Rooms</th><th>Capacity/Room</th><th>Gender</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for gh in guesthouses %}
+        <tr>
+          <td>{{ gh.city }}</td>
+          <td>{{ gh.name }}</td>
+          <td>{{ gh.pincode }}</td>
+          <td>{{ gh.number_of_rooms }}</td>
+          <td>{{ gh.capacity_per_room }}</td>
+          <td>{{ gh.gender_accommodated }}</td>
+          <td>
+            {% if gh.is_active %}<span class="badge bg-success">Active</span>
+            {% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}
+          </td>
+          <td class="text-nowrap">
+            <a href="{{ url_for('admin.room_list', gh_id=gh.id) }}" class="btn btn-sm btn-outline-info" title="Rooms"><i class="fa-solid fa-door-open"></i></a>
+            <a href="{{ url_for('admin.guesthouse_edit', gh_id=gh.id) }}" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+            <form action="{{ url_for('admin.guesthouse_toggle_active', gh_id=gh.id) }}" method="POST" class="d-inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-warning" title="Activate/Deactivate"><i class="fa-solid fa-power-off"></i></button>
+            </form>
+            <form action="{{ url_for('admin.guesthouse_delete', gh_id=gh.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this guest house?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted">No guest houses found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

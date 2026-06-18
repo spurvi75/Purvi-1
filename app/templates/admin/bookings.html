@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="brand-header"><h3><i class="fa-solid fa-calendar-check"></i> {{ page_title }}</h3></div>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-md-3">
+    <select name="status" class="form-select" onchange="this.form.submit()">
+      <option value="">-- All Statuses --</option>
+      {% for s in all_statuses %}
+        <option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</form>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr><th>Booking No.</th><th>Employee</th><th>City</th><th>Guest House</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.employee_name }}</td>
+          <td>{{ b.city }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary badge-status">{{ b.booking_status }}</span></td>
+          <td><a href="{{ url_for('admin.booking_detail', booking_id=b.id) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="text-center text-muted">No bookings found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
