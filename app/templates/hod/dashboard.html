@@ -25,9 +25,10 @@
 </div>
 
 <div class="row g-3 mb-4">
-  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.pending_approvals') }}">Pending Approvals</a></div>
-  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.approved_requests') }}">Approved Requests</a></div>
-  <div class="col-md-4"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.rejected_requests') }}">Rejected Requests</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.pending_approvals') }}"><i class="fa-solid fa-hourglass-half me-1"></i> Pending Approvals</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.approved_requests') }}"><i class="fa-solid fa-circle-check me-1"></i> Approved Requests</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="{{ url_for('hod.rejected_requests') }}"><i class="fa-solid fa-circle-xmark me-1"></i> Rejected Requests</a></div>
+  <div class="col-md-3"><a class="btn btn-outline-success w-100" href="{{ url_for('employee.booking') }}"><i class="fa-solid fa-bed me-1"></i> Book Guest House</a></div>
 </div>
 
 <div class="card">
@@ -51,6 +52,35 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header">My Guest House Bookings</div>
+  <div class="card-body table-responsive">
+    <table class="table table-hover align-middle">
+      <thead><tr><th>Booking No.</th><th>Guest House</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for b in my_bookings %}
+        <tr>
+          <td>{{ b.booking_number }}</td>
+          <td>{{ b.guest_house_name }}</td>
+          <td>{{ b.room_number }}</td>
+          <td>{{ b.check_in_date }}</td>
+          <td>{{ b.check_out_date }}</td>
+          <td><span class="badge bg-secondary badge-status">{{ b.booking_status }}</span></td>
+          <td>
+            {% if b.booking_status in ['Pending HOD Approval', 'Approved', 'Confirmed'] %}
+            <a href="{{ url_for('employee.cancel_booking', booking_id=b.id) }}" class="btn btn-sm btn-outline-danger">Cancel</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted">You have no bookings yet. <a href="{{ url_for('employee.booking') }}">Book a guest house</a>.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{{ url_for('employee.my_bookings') }}" class="btn btn-sm btn-outline-primary mt-2"><i class="fa-solid fa-list-check me-1"></i> View All My Bookings</a>
   </div>
 </div>
 {% endblock %}

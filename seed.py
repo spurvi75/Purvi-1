@@ -6,7 +6,8 @@ application can be tested immediately:
 
 This creates:
   - 1 Admin user
-  - 1 HOD user
+  - 1 Director user (HOD role, approves HOD-level booking requests)
+  - 1 HOD user (reports to Director)
   - 2 Employee users (one Grade C male, one Grade A female) reporting to the HOD
   - 2 Guest Houses (with rooms auto-created) in two different cities
 
@@ -37,6 +38,20 @@ with app.app_context():
         admin.set_password("Admin@123")
         db.session.add(admin)
 
+    if User.query.filter_by(email="director@axisindia.in").first() is None:
+        director = User(
+            employee_code="EMP0005",
+            name="Anita Desai (Director)",
+            email="director@axisindia.in",
+            mobile_number="9876500005",
+            grade="A",
+            gender="Female",
+            roles="HOD",
+            is_active_user=True,
+        )
+        director.set_password("Director@123")
+        db.session.add(director)
+
     if User.query.filter_by(email="hod@axisindia.in").first() is None:
         hod = User(
             employee_code="EMP0002",
@@ -45,6 +60,8 @@ with app.app_context():
             mobile_number="9876500002",
             grade="A",
             gender="Male",
+            hod_name="Anita Desai",
+            hod_email="director@axisindia.in",
             roles="HOD",
             is_active_user=True,
         )
@@ -126,10 +143,11 @@ with app.app_context():
 print("Database initialized with sample data.")
 print("-" * 60)
 print("Default test users (change passwords after first login):")
-print("  Admin     : admin@axisindia.in     / Admin@123")
-print("  HOD       : hod@axisindia.in       / Hod@1234")
-print("  Employee 1: employee1@axisindia.in / Employee@123  (Male, Grade C)")
-print("  Employee 2: employee2@axisindia.in / Employee@123  (Female, Grade A)")
+print("  Admin     : admin@axisindia.in      / Admin@123")
+print("  Director  : director@axisindia.in   / Director@123  (HOD role, approves HOD bookings)")
+print("  HOD       : hod@axisindia.in        / Hod@1234      (reports to Director)")
+print("  Employee 1: employee1@axisindia.in  / Employee@123  (Male, Grade C)")
+print("  Employee 2: employee2@axisindia.in  / Employee@123  (Female, Grade A)")
 print("-" * 60)
 print("Sample Guest Houses: Axis Ahmedabad Guest House (Male+Female, 3 rooms),")
 print("                     Axis Mumbai Guest House (Male only, 2 rooms)")

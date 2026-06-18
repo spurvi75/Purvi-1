@@ -43,9 +43,13 @@ def dashboard():
         hod_email=current_user.email, booking_status=BookingStatus.REJECTED
     ).count()
     recent_pending = _pending_for_current_hod().limit(5).all()
+    my_bookings = Booking.query.filter_by(employee_id=current_user.id).order_by(
+        Booking.created_date.desc()
+    ).limit(5).all()
     return render_template(
         "hod/dashboard.html", pending_count=pending_count, approved_count=approved_count,
-        rejected_count=rejected_count, recent_pending=recent_pending
+        rejected_count=rejected_count, recent_pending=recent_pending,
+        my_bookings=my_bookings,
     )
 
 
@@ -88,6 +92,10 @@ def approve(booking_id):
         flash("You may only act on requests routed to you.", "danger")
         return redirect(url_for("hod.pending_approvals"))
 
+    if booking.employee_id == current_user.id:
+        flash("You cannot approve your own booking request.", "danger")
+        return redirect(url_for("hod.pending_approvals"))
+
     if booking.booking_status != BookingStatus.PENDING_HOD_APPROVAL:
         flash("This request has already been actioned.", "warning")
         return redirect(url_for("hod.pending_approvals"))
@@ -110,6 +118,10 @@ def reject(booking_id):
     booking = Booking.query.get_or_404(booking_id)
     if booking.hod_email != current_user.email:
         flash("You may only act on requests routed to you.", "danger")
+        return redirect(url_for("hod.pending_approvals"))
+
+    if booking.employee_id == current_user.id:
+        flash("You cannot reject your own booking request.", "danger")
         return redirect(url_for("hod.pending_approvals"))
 
     if booking.booking_status != BookingStatus.PENDING_HOD_APPROVAL:

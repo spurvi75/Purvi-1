@@ -27,29 +27,35 @@
 </div>
 
 {% if booking.booking_status == 'Pending HOD Approval' %}
-<div class="row">
-  <div class="col-md-4">
-    <form action="{{ url_for('hod.approve', booking_id=booking.id) }}" method="POST" onsubmit="return confirm('Approve this booking?');">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <button class="btn btn-success w-100"><i class="fa-solid fa-check"></i> Approve</button>
-    </form>
+  {% if booking.employee_id == current_user.id %}
+  <div class="alert alert-info">
+    <i class="fa-solid fa-circle-info me-1"></i> This is your own booking request. It must be approved by your HOD.
   </div>
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">Reject Request</div>
-      <div class="card-body">
-        <form method="POST" action="{{ url_for('hod.reject', booking_id=booking.id) }}">
-          {{ reject_form.hidden_tag() }}
-          <div class="mb-3">
-            {{ reject_form.rejection_reason.label(class="form-label") }}
-            {{ reject_form.rejection_reason(class="form-control", rows="2") }}
-          </div>
-          {{ reject_form.submit(class="btn btn-danger") }}
-        </form>
+  {% else %}
+  <div class="row">
+    <div class="col-md-4">
+      <form action="{{ url_for('hod.approve', booking_id=booking.id) }}" method="POST" onsubmit="return confirm('Approve this booking?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-success w-100"><i class="fa-solid fa-check"></i> Approve</button>
+      </form>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">Reject Request</div>
+        <div class="card-body">
+          <form method="POST" action="{{ url_for('hod.reject', booking_id=booking.id) }}">
+            {{ reject_form.hidden_tag() }}
+            <div class="mb-3">
+              {{ reject_form.rejection_reason.label(class="form-label") }}
+              {{ reject_form.rejection_reason(class="form-control", rows="2") }}
+            </div>
+            {{ reject_form.submit(class="btn btn-danger") }}
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  {% endif %}
 {% endif %}
 
 <a href="{{ url_for('hod.pending_approvals') }}" class="btn btn-outline-secondary mt-3">Back</a>
